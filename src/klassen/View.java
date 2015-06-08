@@ -1,4 +1,4 @@
-package klassen.view;
+package klassen;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
 
-public class Main extends Application {
+public class View extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
