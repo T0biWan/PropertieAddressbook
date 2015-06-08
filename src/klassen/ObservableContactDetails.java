@@ -11,4 +11,65 @@ public class ObservableContactDetails extends ContactDetails {
 	private IntegerProperty	telefonnummer;
 	private StringProperty	mail;
 	
+	//Getter
+	public StringProperty vornameProperty() {
+		return vorname;
+	}
+	
+	public StringProperty nachnameProperty() {
+		return nachname;
+	}
+	
+	public StringProperty adresseProperty() {
+		return adresse;
+	}
+	
+	public IntegerProperty telefonnummerProperty() {
+		return telefonnummer;
+	}
+	
+	public StringProperty mailProperty() {
+		return mail;
+	}
+	
+	public String getVorname() {
+		return vorname.get();
+	}
+	
+	public String getNachname() {
+		return nachname.get();
+	}
+	
+	public String getAdresse() {
+		return adresse.get();
+	}
+	
+	public Integer getTelefonnummer2() {
+		return telefonnummer.get();
+	}
+	
+	public String getMail() {
+		return mail.get();
+	}
+	
+	//Setter
+	public void setVorname(String vorname) {
+		this.vorname.set(vorname);
+	}
+	
+	public void setNachname(String nachname) {
+		this.nachname.set(nachname);
+	}
+	
+	public void setAdresse(String adresse) {
+		this.adresse.set(adresse);
+	}
+	
+	public void setTelefonnummer (int telefonnummer) {
+		this.telefonnummer.set(telefonnummer);
+	}
+	
+	public void setMail (String mail) {
+		this.adresse.set(mail);
+	}
 }

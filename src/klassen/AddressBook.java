@@ -1,8 +1,7 @@
 package klassen;
 
-import classes.ContactDetails;
+import klassen.ContactDetails;
 import interfaces.AddressBookInterface;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
