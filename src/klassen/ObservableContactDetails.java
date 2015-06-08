@@ -11,6 +11,14 @@ public class ObservableContactDetails extends ContactDetails {
 	private IntegerProperty	telefonnummer;
 	private StringProperty	mail;
 	
+	public ObservableContactDetails (String vorname, String nachname, String adresse, int telefonnummer, String mail) {
+		setVorname(vorname);
+		setNachname(nachname);
+		setAdresse(adresse);
+		setTelefonnummer(telefonnummer);
+		setMail(mail);
+	}
+	
 	//Getter
 	public StringProperty vornameProperty() {
 		return vorname;
