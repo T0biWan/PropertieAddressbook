@@ -3,29 +3,43 @@ package classes;
 import java.security.SecureRandom;
 import java.util.Random;
 
-import exceptions.*;
+import exceptions.DetailsNotFoundException;
+import exceptions.ParameterStringIsEmptyException;
+import exceptions.DuplicateKeyException;
+import exceptions.InvalidContactException;
+import exceptions.ParameterStringIsEmptyException;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.*;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import application.Control;
 
 public class AddressBookUI extends Application{
 
-	TableView<ObservableContactDetails> tabelleView = new TableView<>();
-	AddressBook buch = new AddressBook();
+	private TableView<ObservableContactDetails> tabelleView = new TableView<>();
+	private ListView<ObservableContactDetails> liste = new ListView<>();
+	private AddressBook buch = new AddressBook();
+	
+	private BorderPane pane = new BorderPane();
+	private StackPane center = new StackPane();
 	
 	//DefaultNamen, damit wir Zufallskontakte entwickeln können
 	private static char[] VALID_CHARACTERS =
 			    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456879".toCharArray();
+	
+
 	
 	public AddressBookUI() {
 		// wir füllen unser AdressBuch
@@ -41,18 +55,20 @@ public class AddressBookUI extends Application{
 		
 		primaryStage.setTitle("Cooles Listen");
  
-		this.erstelleTabelle();
-
-		// wir generieren unsere FX Fenster
-		Group group = new Group();
+		/*this.erstelleTabelle();*/
 		
-		group.getChildren().add(new VBox(hLabel("Tabelle"),tabelleView));
+		this.erstelleListe();
 		
-		Scene scene = new Scene(group, 1200, 500);
+		pane.setTop(new VBox(hLabel("Liste")));
+		
+		center.getChildren().add(new Text("Kein Kontakt ausgewählt."));
+		pane.setCenter(center);
+		
+		Scene scene = new Scene(pane, 1200, 500);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
+
 	private Label hLabel(String str) {
 		Label label = new Label(str);
 	    label.setFont(new Font("Arial", 30));
@@ -83,15 +99,31 @@ public class AddressBookUI extends Application{
 
 		}
 	}
-
-	/**
-	 * Die TableView ist Verwandt mit dem ListView und gehört zu den etwas komplexeren Komponenten. Dank JavaFX wird werden uns 
-	 * Eigenschaften wie z.B. Sortierung der der Spalten, Layout etc. von Java abgenommen. Auch bei der TableView sollte 
-	 * direkt mit den Objekten gearbeitet werden. Dazu muss auch hier wieder über setCellValueFactory angegeben werden, welche Attribute
-	 * unseres Objektes angezeigt werden. Auch hier werden die Daten erst in einer observableArrayList gespeicht und dann der TableView übergeben.
-	 */
 	
-	private void erstelleTabelle() {
+	
+	private void erstelleListe() {
+		try {
+			// als erstes holen wir alle Kontakte
+			ObservableContactDetails[] personen = buch.search("");
+			// wir definieren ein FXCollections.observableArrayList, welches die darzustellenden Daten enthält
+			ObservableList<ObservableContactDetails> namen = FXCollections.observableArrayList();
+			for(ObservableContactDetails person : personen){
+				namen.add(person);
+			}
+			// wir fügen unsere Daten der observableArrayList in unsere Liste hinzu
+			liste.setItems(namen);
+			
+		} catch (ParameterStringIsEmptyException | DetailsNotFoundException e) { e.getMessage();}
+		
+		liste.setCellFactory(c -> new Control(center));
+		
+		liste.setEditable(true);
+		
+		pane.setLeft(new VBox(10,liste));
+
+	}
+	
+	/*private void erstelleTabelle() {
 		
 		try {
 			// als erstes holen wir alle Kontakte
@@ -138,7 +170,7 @@ public class AddressBookUI extends Application{
         		adresse
         		);
 
-	}
+	}*/
 
 
 	public static void main(String[] args) {
