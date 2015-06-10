@@ -18,7 +18,7 @@ public class AddressBook implements AddressBookInterface {
 	/**
 	 * Unsere Treemap die die Speicherung der Kontakte übernimmt
 	 */
-	private Map<String, ContactDetails> namesMap;
+	private Map<String, ObservableContactDetails> namesMap;
 
 	/**
 	 * Standardkonstruktor - erstellt unsere Treemap
@@ -46,12 +46,12 @@ public class AddressBook implements AddressBookInterface {
 	 */
 
 	@Override
-	public ContactDetails getDetails(String key) throws DetailsNotFoundException, ParameterStringIsEmptyException {
+	public ObservableContactDetails getDetails(String key) throws DetailsNotFoundException, ParameterStringIsEmptyException {
 		
 		if(key == null || key.isEmpty())
 			throw new ParameterStringIsEmptyException("Sie müssen mindestens einen Vor- und Nachnamen angeben.");
 
-		ContactDetails[] matched = this.search(key);
+		ObservableContactDetails[] matched = this.search(key);
 
 		if (!(matched.length > 0))
 			throw new DetailsNotFoundException("Leider konnten keine Kontakte '" + key + "gefunden werden!");
@@ -62,7 +62,7 @@ public class AddressBook implements AddressBookInterface {
 	}
 
 	@Override
-	public ContactDetails getDetails(String name, String lastname,String phone, String mail, String address) throws DetailsNotFoundException, ParameterStringIsEmptyException {
+	public ObservableContactDetails getDetails(String name, String lastname,String phone, String mail, String address) throws DetailsNotFoundException, ParameterStringIsEmptyException {
 		// NEU - wir generieren unseren Key
 		String key = this.generateKey(name, lastname, phone, mail, address);
 		
@@ -92,7 +92,7 @@ public class AddressBook implements AddressBookInterface {
 	 * @see classes.AddressBookInterface#addDetails(classes.ContactDetails)
 	 */
 	@Override
-	public void addDetails(ContactDetails details) throws DuplicateKeyException, InvalidContactException, ParameterStringIsEmptyException {
+	public void addDetails(ObservableContactDetails details) throws DuplicateKeyException, InvalidContactException, ParameterStringIsEmptyException {
 		// wir überprüfen, ob details etwas enthält
 		if (details != null) {
 			// NEU - wir generieren unseren Key
@@ -121,7 +121,7 @@ public class AddressBook implements AddressBookInterface {
 	 * classes.ContactDetails)
 	 */
 	@Override
-	public void changeDetails(String oldKey, ContactDetails details) throws DuplicateKeyException, InvalidContactException, KeyIsNotInUseException, ParameterStringIsEmptyException {
+	public void changeDetails(String oldKey, ObservableContactDetails details) throws DuplicateKeyException, InvalidContactException, KeyIsNotInUseException, ParameterStringIsEmptyException {
 		
 		if(oldKey == null || oldKey.isEmpty())
 			throw new ParameterStringIsEmptyException("Bitte einen Kontakt auswählen, bevor Sie ihn ändern.");
@@ -275,7 +275,7 @@ public class AddressBook implements AddressBookInterface {
 	 * @see classes.AddressBookInterface#generateKey(classes.ContactDetails)
 	 */
 	@Override
-	public String generateKey(ContactDetails details)throws ParameterStringIsEmptyException {
+	public String generateKey(ObservableContactDetails details)throws ParameterStringIsEmptyException {
 		// gleiche Funktion wie oben nur nimmt stattdessen ein Objekt
 		// ContactDetails entgegen
 		return this.generateKey(details.getVorname(), details.getNachname(),

@@ -1,117 +1,109 @@
 package application;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.security.SecureRandom;
+import java.util.Random;
 
-import javafx.animation.FadeTransition;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
+import classes.AddressBook;
 import classes.ObservableContactDetails;
+import exceptions.DetailsNotFoundException;
+import exceptions.DuplicateKeyException;
+import exceptions.InvalidContactException;
+import exceptions.ParameterStringIsEmptyException;
 
-public class Control extends ListCell<ObservableContactDetails>{
+public class Control {
 	
-	private Map<String, TextField> fields = new HashMap<>();
-	private TextField nameField = new TextField(), lastnameField = new TextField(), phoneField = new TextField(), emailField = new TextField(), addressField = new TextField();
+	private BorderPane pane;
+	private StackPane center = new StackPane();
+	private ListView<ObservableContactDetails> liste = new ListView<>();
+	private AddressBook buch = new AddressBook();
+	//DefaultNamen, damit wir Zufallskontakte entwickeln können
+	private static char[] VALID_CHARACTERS =
+			    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456879".toCharArray();
 	
-	private StackPane pane;
 	
-	public Control(StackPane pane) {
+	public Control(BorderPane pane) {
 		this.pane = pane;
-		
-		fields.put("Vorname",nameField);
-		fields.put("Nachname",lastnameField);
-		fields.put("Telefon",phoneField);
-		fields.put("E-Mail",emailField);
-		fields.put("Addresse",addressField);
+		center.getChildren().add(new Text("Kein Kontakt ausgewählt."));
+		pane.setCenter(center);
+		fuelleBuch();
 	}
 	
-	@Override
-	protected void updateItem(ObservableContactDetails item, boolean empty) {
-		super.updateItem(item, empty);
-		updateViewMode();
-	}
+	/**
+	 * fülle das Addressbook mit Defaultwerten
+	 */
+	private void fuelleBuch(){
 
-	@Override
-	public void startEdit(){
-		super.startEdit();
-		updateViewMode();
-	}
-	
-	protected void updateViewMode(){
-		VBox contactBox = new VBox();
-		contactBox.setPadding(new Insets(45,10,10,20));
+		for(int i = 0; i < 500; i++){
 
-		Text header = new Text();
-		header.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
+			ObservableContactDetails person = new ObservableContactDetails(
+					this.csRandomAlphaNumericString(5), 
+					this.csRandomAlphaNumericString(6),
+					this.csRandomAlphaNumericString(9),
+					this.csRandomAlphaNumericString(12),
+					this.csRandomAlphaNumericString(25)
+					);	
 
-		VBox contacts = new VBox();
-		contacts.setPadding(new Insets(90,10,10,0));
-
-		setText(null);
-		if(isEditing()){
-			if(getItem() != null){
-				header.setText("Details zu " + getItem().getVorname() + " " + getItem().getNachname());
-				
-				nameField.setText(getItem().getVorname());
-				lastnameField.setText(getItem().getNachname());
-				phoneField.setText(getItem().getTelefonnummer());
-				emailField.setText(getItem().getMail());
-				addressField.setText(getItem().getAdresse());
+			try {
+				buch.addDetails(person);
+			} catch (DuplicateKeyException | InvalidContactException| ParameterStringIsEmptyException e) {
+				 e.getMessage();
 			}
-			
-			HBox confirm = new HBox(10);
-			confirm.setPadding(new Insets(10));
-			confirm.setAlignment(Pos.BASELINE_CENTER);
-			
-			Button save = new Button("Speichern");
-			Button delete = new Button("Löschen");
-			
-			for(String label : fields.keySet()){
-				contacts.getChildren().add(this.createRowBox(label,fields.get(label)));
-			}
-		
-			
-			confirm.getChildren().addAll(save, delete);
-			
 
-			contactBox.getChildren().addAll(header,contacts,confirm);
-			
-			FadeTransition ft = new FadeTransition(Duration.millis(500), contactBox);
-			ft.setFromValue(0.0);
-			ft.setToValue(1.0);
-			ft.play();
-			this.pane.getChildren().clear();
-			this.pane.getChildren().add(contactBox);
-			
-			setText(getItem().getNachname() + ", " + getItem().getVorname());
-		}else if(getItem() != null){
-           setText(getItem().getNachname() + ", " + getItem().getVorname());
 		}
 	}
 	
-	private HBox createRowBox(String label, TextField rowField){
+	public void erstelleListe() {
+		try {
+			// als erstes holen wir alle Kontakte
+			ObservableContactDetails[] personen = buch.search("");
+			// wir definieren ein FXCollections.observableArrayList, welches die darzustellenden Daten enthält
+			ObservableList<ObservableContactDetails> namen = FXCollections.observableArrayList();
+			for(ObservableContactDetails person : personen){
+				namen.add(person);
+			}
+			// wir fügen unsere Daten der observableArrayList in unsere Liste hinzu
+			liste.setItems(namen);
+			
+		} catch (ParameterStringIsEmptyException | DetailsNotFoundException e) { e.getMessage();}
 		
-		HBox rowBox = new HBox();
-		rowBox.setPadding(new Insets(10,10,10,0));
+		liste.setCellFactory(c -> new ListCellFactory(center));
 		
-		Label rowLabel = new Label(label);
-		rowLabel.setMinWidth(100);
+		liste.setEditable(true);
 		
-		rowField.setMinWidth(400);
-		rowBox.getChildren().addAll(rowLabel,rowField);
-		
-		return rowBox;
+		pane.setLeft(new VBox(10,liste));
+
 	}
+	
+	private String csRandomAlphaNumericString(int numChars) {
+		// bei der Generierung von Zufallszahlen gibt es wie bei Pflanzen einen Samen, der zu Nachkommen führt. 
+		// Aus diesem Startwert ermittelt der Zufallszahlengenerator anschließend die folgenden Zahlen durch lineare Kongruenzen.
+		// Dadurch sind die Zahlen nicht wirklich zufällig, sondern gehorchen einem mathematischen Verfahren. 
+		// Kryptografisch bessere Zufallszahlen liefert die Klasse java.security.SecureRandom, die eine Unterklasse von Random ist.
+		SecureRandom srand = new SecureRandom();
+		
+	    Random rand = new Random();
+	    // wir intantiieren uns Array vom Typ char mit der länge der Der Zeichen die unser Default-Wort haben soll
+	    char[] buff = new char[numChars];
+
+	    // nun durchlaufen wir eine for-Schleife für jedes Zeichen 
+	    for (int i = 0; i < numChars; ++i) {
+	      // damit auch bei Zeichenketten länger als 10 Zeichen der Zufall gewährleistet wird setzen wir einen neuen Samen mit Hilfe unseres 
+	      // SecureRandom Super Algorithmus....
+	      if ((i % 10) == 0) {
+	    	  // and here is where the magic happens....
+	          rand.setSeed(srand.nextLong()); // 64 bits of random!
+	      }
+	      // wir kreieren in unseren Array buff ein zufälliges Zeichen mit Hilfe der von Random und unseren Zeichen Array VALID_CHARACTERS.
+	      buff[i] = VALID_CHARACTERS[rand.nextInt(VALID_CHARACTERS.length)];
+	    }
+	    return new String(buff);
+	}
+
 }

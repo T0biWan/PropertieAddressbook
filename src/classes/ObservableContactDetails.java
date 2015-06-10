@@ -12,10 +12,11 @@ public class ObservableContactDetails extends ContactDetails {
 	private StringProperty  mail = new SimpleStringProperty();
 
 	public ObservableContactDetails(){
-		super();
+		this(null,null,null,null,null);
 	}
 	
 	public ObservableContactDetails(String vorname, String nachname, String adresse, String telefonnummer, String mail){
+		super();
 		this.setVorname(vorname);
 		this.setNachname(nachname);
 		this.setAdresse(adresse);
@@ -24,11 +25,12 @@ public class ObservableContactDetails extends ContactDetails {
 	}
 	
 	public ObservableContactDetails(ObservableContactDetails observableContactDetails){
-		this.setVorname(observableContactDetails.getVorname());
-		this.setNachname(observableContactDetails.getNachname());
-		this.setAdresse(observableContactDetails.getAdresse());
-		this.setTelefonnummer(observableContactDetails.getTelefonnummer());
-		this.setMail(observableContactDetails.getMail());
+		this(   observableContactDetails.getVorname(),
+				observableContactDetails.getNachname(),
+				observableContactDetails.getAdresse(), 
+				observableContactDetails.getTelefonnummer(),
+				observableContactDetails.getMail()
+				);
 	}
 	
 	// GETTER UND SETTER
