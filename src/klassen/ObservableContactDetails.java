@@ -1,15 +1,16 @@
 package klassen;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class ObservableContactDetails extends ContactDetails {
 	// Attribute
-	private StringProperty	vorname;
-	private StringProperty	nachname;
-	private StringProperty	adresse;
-	private StringProperty	telefonnummer;
-	private StringProperty	mail;
+	private StringProperty	vorname				= new SimpleStringProperty();
+	private StringProperty	nachname			= new SimpleStringProperty();
+	private StringProperty	adresse				= new SimpleStringProperty();
+	private StringProperty	telefonnummer		= new SimpleStringProperty();
+	private StringProperty	mail				= new SimpleStringProperty();
 	
 	public ObservableContactDetails (String vorname, String nachname, String adresse, String telefonnummer, String mail) {
 		setVorname(vorname);
@@ -17,6 +18,20 @@ public class ObservableContactDetails extends ContactDetails {
 		setAdresse(adresse);
 		setTelefonnummer(telefonnummer);
 		setMail(mail);
+	}
+	
+	//Standardkonstruktor
+	public ObservableContactDetails () {
+		this(null, null, null, null, null);
+	}
+	
+	//Kopierkonstruktor
+	public ObservableContactDetails(ObservableContactDetails contact) {
+		setVorname(contact.getVorname());
+		setNachname(contact.getNachname());
+		setAdresse(contact.getAdresse());
+		setTelefonnummer(contact.getTelefonnummer());
+		setMail(contact.getMail());
 	}
 	
 	//Getter
@@ -79,5 +94,11 @@ public class ObservableContactDetails extends ContactDetails {
 	
 	public void setMail (String mail) {
 		this.adresse.set(mail);
+	}
+	
+	public String toString() {
+		return "Klasse: ObservableContactDetails\nKontaktdaten:\nVorname:\t" + getVorname() + "\nNachname:\t" + getNachname()
+				+ "\nAdresse:\t" + getAdresse() + "\nTelefonnummer:\t" + getTelefonnummer()
+				+ "\nMail:\t\t" + getMail();
 	}
 }
