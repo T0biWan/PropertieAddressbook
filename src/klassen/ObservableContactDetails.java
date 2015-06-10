@@ -8,10 +8,10 @@ public class ObservableContactDetails extends ContactDetails {
 	private StringProperty	vorname;
 	private StringProperty	nachname;
 	private StringProperty	adresse;
-	private IntegerProperty	telefonnummer;
+	private StringProperty	telefonnummer;
 	private StringProperty	mail;
 	
-	public ObservableContactDetails (String vorname, String nachname, String adresse, int telefonnummer, String mail) {
+	public ObservableContactDetails (String vorname, String nachname, String adresse, String telefonnummer, String mail) {
 		setVorname(vorname);
 		setNachname(nachname);
 		setAdresse(adresse);
@@ -32,7 +32,7 @@ public class ObservableContactDetails extends ContactDetails {
 		return adresse;
 	}
 	
-	public IntegerProperty telefonnummerProperty() {
+	public StringProperty telefonnummerProperty() {
 		return telefonnummer;
 	}
 	
@@ -52,7 +52,7 @@ public class ObservableContactDetails extends ContactDetails {
 		return adresse.get();
 	}
 	
-	public Integer getTelefonnummer2() {
+	public String getTelefonnummer() {
 		return telefonnummer.get();
 	}
 	
@@ -73,7 +73,7 @@ public class ObservableContactDetails extends ContactDetails {
 		this.adresse.set(adresse);
 	}
 	
-	public void setTelefonnummer (int telefonnummer) {
+	public void setTelefonnummer (String telefonnummer) {
 		this.telefonnummer.set(telefonnummer);
 	}
 	

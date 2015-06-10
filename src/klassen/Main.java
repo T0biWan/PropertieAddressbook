@@ -8,6 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		//Attribute
 		RandomStringGenerator rsg = new RandomStringGenerator();
+		View v = new View();
 		
 		//Liste mit Inhalt füllen
 		for(int i = 0; i < 10; i++){
@@ -21,6 +22,7 @@ public class Main {
 		}
 		
 		//View starten
+		v.launch(args);
 	}
 
 }
