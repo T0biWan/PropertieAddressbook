@@ -12,11 +12,32 @@ import javafx.scene.layout.BorderPane;
 
 public class View extends Application {
 	//Attribute
-	TableView <ObservableContactDetails> 			tabelleFürKontakte		= new TableView();
 	Control control = new Control();
+	TableView <ObservableContactDetails> 			tabelleFürKontakte		= new TableView();
 	
+	
+	//Methoden
 	@Override
 	public void start(Stage stage) {
+		erstelleTabelle();
+		
+		//Pane
+		BorderPane pane = new BorderPane();
+		pane.setLeft(tabelleFürKontakte);
+		
+		// SCENE
+		Scene scene = new Scene(pane);
+
+		// STAGE
+		stage.setScene(scene);
+		stage.show();
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+	
+	public void erstelleTabelle () {
 		//Binding
 		tabelleFürKontakte.setItems(control.oList);
 		
@@ -36,20 +57,6 @@ public class View extends Application {
 		adresseSpalte.setCellValueFactory(e -> e.getValue().adresseProperty());
 		telefonnummerSpalte.setCellValueFactory(e -> e.getValue().telefonnummerProperty());
 		mailSpalte.setCellValueFactory(e -> e.getValue().mailProperty());
-		
-		//Pane
-		BorderPane pane = new BorderPane();
-		pane.setLeft(tabelleFürKontakte);
-		
-		// SCENE
-		Scene scene = new Scene(pane);
-
-		// STAGE
-		stage.setScene(scene);
-		stage.show();
 	}
 	
-	public static void main(String[] args) {
-		launch(args);
-	}
 }
