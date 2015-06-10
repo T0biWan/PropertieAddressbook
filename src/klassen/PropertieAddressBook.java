@@ -5,12 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import exceptions.DetailsNotFoundException;
-import exceptions.DuplicateKeyException;
-import exceptions.InvalidContactException;
-import exceptions.KeyIsNotInUseException;
-import exceptions.ParameterStringIsEmptyException;
-
 public class PropertieAddressBook {
 	//Attribute
 	//Map in der die ObservableContactDetails gespeichert werden

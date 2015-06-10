@@ -7,24 +7,34 @@ import javafx.scene.control.TableView;
 
 public class Control {
 	//Attribute
-	TableView <ObservableContactDetails> 		tabelleFürKontakte		= new TableView();
-	ObservableList <ObservableContactDetails>	kontakte				= FXCollections.observableArrayList();
+	PropertieAddressBook							pAddressBook 			= new PropertieAddressBook();
+	RandomStringGenerator							rStringGen 				= new RandomStringGenerator();
+	ObservableList <ObservableContactDetails>		oList					= FXCollections.observableArrayList();
 	
-	//konstrukte
+	
+	//Konstruktor
 	public Control () {
-		//Binding
-		tabelleFürKontakte.setItems(kontakte);
+		//AddressBook mit Kontakten füllen
+		fuellePropertieAddressBook(25);
 		
-		//Spalten erzeugen
-		TableColumn<ObservableContactDetails, String> vornameSpalte = new TableColumn<>("Vorname");
-		TableColumn<ObservableContactDetails, String> nachnameSpalte = new TableColumn<>("Nachname");
-		TableColumn<ObservableContactDetails, String> adresseSpalte = new TableColumn<>("Adresse");
-		TableColumn<ObservableContactDetails, Number> telefonnummerSpalte = new TableColumn<>("Telefonnummer");
-		TableColumn<ObservableContactDetails, String> mailSpalte = new TableColumn<>("E-Mail");
-		
-		//Spalten an Tabelle übergeben
-		tabelleFürKontakte.getColumns().addAll(vornameSpalte, nachnameSpalte, adresseSpalte, telefonnummerSpalte, mailSpalte);
+		//Inhalt von AddressBook an ObservableList übergeben
+		fuelleListeMitAddressBookInhalt();
 	}
 	
+	
+	//Methoden
+	public void fuellePropertieAddressBook (int anzahlKontakte) {
+		for(int i = 0; i < anzahlKontakte; i++) {
+			ObservableContactDetails	ocd = new ObservableContactDetails(rStringGen.generateRandomString(5), rStringGen.generateRandomString(5), rStringGen.generateRandomString(5), rStringGen.generateRandomString(5), rStringGen.generateRandomString(5));
+			pAddressBook.addDetails(ocd);
+		}
+	}
+	
+	public void fuelleListeMitAddressBookInhalt() {
+		ObservableContactDetails[] kontakte = pAddressBook.search("");
+		for(ObservableContactDetails index : kontakte) {
+			oList.add(index);
+		}
+	}
 	
 }
