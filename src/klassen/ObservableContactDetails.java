@@ -92,7 +92,7 @@ public class ObservableContactDetails extends ContactDetails {
 	}
 
 	public void setMail(String mail) {
-		this.adresse.set(mail);
+		this.mail.set(mail);
 	}
 
 	public String toString() {
