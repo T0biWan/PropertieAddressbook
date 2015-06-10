@@ -19,6 +19,8 @@ public class Control {
 		
 		//Inhalt von AddressBook an ObservableList übergeben
 		fuelleListeMitAddressBookInhalt();
+		
+
 	}
 	
 	

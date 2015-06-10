@@ -9,7 +9,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 
-
 public class View extends Application {
 	//Attribute
 	Control control = new Control();
@@ -19,7 +18,7 @@ public class View extends Application {
 	//Methoden
 	@Override
 	public void start(Stage stage) {
-		erstelleTabelle();
+		initTabelle();
 		
 		//Pane
 		BorderPane pane = new BorderPane();
@@ -37,7 +36,7 @@ public class View extends Application {
 		launch(args);
 	}
 	
-	public void erstelleTabelle () {
+	public void initTabelle () {
 		//Binding
 		tabelleFürKontakte.setItems(control.oList);
 		
@@ -57,6 +56,10 @@ public class View extends Application {
 		adresseSpalte.setCellValueFactory(e -> e.getValue().adresseProperty());
 		telefonnummerSpalte.setCellValueFactory(e -> e.getValue().telefonnummerProperty());
 		mailSpalte.setCellValueFactory(e -> e.getValue().mailProperty());
+		
+		//??
+//		tabelleFürKontakte.setRowFactory(c -> new RowFactory());
+		tabelleFürKontakte.setEditable(true);
 	}
 	
 }
