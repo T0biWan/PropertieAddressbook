@@ -108,4 +108,8 @@ public class PropertieAddressBook {
 		}
 	}
 	
+	public String toString()	{
+		return "Klasse: PropertieAddressBook\nKontakte:"
+				+ namesMap;
+	}
 }
