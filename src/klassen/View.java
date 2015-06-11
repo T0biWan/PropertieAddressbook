@@ -12,7 +12,7 @@ import javafx.scene.layout.BorderPane;
 public class View extends Application {
 	//Attribute
 	Control control = new Control();
-	TableView <ObservableContactDetails> 			tabelleFürKontakte		= new TableView();
+	TableView <ObservableContactDetails> 	tabelleFürKontakte	= new TableView();
 	
 	
 	//Methoden
