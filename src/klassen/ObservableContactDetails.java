@@ -4,101 +4,108 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class ObservableContactDetails extends ContactDetails {
-	// Attribute
-	private StringProperty vorname = new SimpleStringProperty();
-	private StringProperty nachname = new SimpleStringProperty();
-	private StringProperty adresse = new SimpleStringProperty();
-	private StringProperty telefonnummer = new SimpleStringProperty();
-	private StringProperty mail = new SimpleStringProperty();
+	
+	private StringProperty	vorname = new SimpleStringProperty();
+	private StringProperty  nachname = new SimpleStringProperty();
+	private StringProperty  adresse = new SimpleStringProperty();
+	private StringProperty  telefonnummer = new SimpleStringProperty();
+	private StringProperty  mail = new SimpleStringProperty();
 
-	public ObservableContactDetails(String vorname, String nachname, String adresse, String telefonnummer, String mail) {
-		setVorname(vorname);
-		setNachname(nachname);
-		setAdresse(adresse);
-		setTelefonnummer(telefonnummer);
-		setMail(mail);
+	public ObservableContactDetails(){
+		this(null,null,null,null,null);
 	}
-
-	// Standardkonstruktor
-	public ObservableContactDetails() {
-		this(null, null, null, null, null);
+	
+	public ObservableContactDetails(String vorname, String nachname, String adresse, String telefonnummer, String mail){
+		super();
+		this.setVorname(vorname);
+		this.setNachname(nachname);
+		this.setAdresse(adresse);
+		this.setTelefonnummer(telefonnummer);
+		this.setMail(mail);
 	}
-
-	// Kopierkonstruktor
-	public ObservableContactDetails(ObservableContactDetails contact) {
-		setVorname(contact.getVorname());
-		setNachname(contact.getNachname());
-		setAdresse(contact.getAdresse());
-		setTelefonnummer(contact.getTelefonnummer());
-		setMail(contact.getMail());
+	
+	public ObservableContactDetails(ObservableContactDetails observableContactDetails){
+		this(   observableContactDetails.getVorname(),
+				observableContactDetails.getNachname(),
+				observableContactDetails.getAdresse(), 
+				observableContactDetails.getTelefonnummer(),
+				observableContactDetails.getMail()
+				);
 	}
-
-	// Getter
-	public StringProperty vornameProperty() {
-		return vorname;
-	}
-
-	public StringProperty nachnameProperty() {
-		return nachname;
-	}
-
-	public StringProperty adresseProperty() {
-		return adresse;
-	}
-
-	public StringProperty telefonnummerProperty() {
-		return telefonnummer;
-	}
-
-	public StringProperty mailProperty() {
-		return mail;
-	}
+	
+	// GETTER UND SETTER
+	
+	public StringProperty vornameProperty(){ return vorname;}
 
 	public String getVorname() {
 		return vorname.get();
 	}
 
-	public String getNachname() {
-		return nachname.get();
-	}
-
-	public String getAdresse() {
-		return adresse.get();
-	}
-
-	public String getTelefonnummer() {
-		return telefonnummer.get();
-	}
-
-	public String getMail() {
-		return mail.get();
-	}
-
-	// Setter
 	public void setVorname(String vorname) {
 		this.vorname.set(vorname);
+	}
+
+	public StringProperty nachnameProperty(){ return nachname;}
+	
+	public String getNachname() {
+		return nachname.get();
 	}
 
 	public void setNachname(String nachname) {
 		this.nachname.set(nachname);
 	}
+	
+	public StringProperty adresseProperty(){ return adresse;}
+
+	public String getAdresse() {
+		return adresse.get();
+	}
 
 	public void setAdresse(String adresse) {
 		this.adresse.set(adresse);
+	}
+	
+	public StringProperty telefonnummerProperty(){ return telefonnummer;}
+
+	public String getTelefonnummer() {
+		return telefonnummer.get();
 	}
 
 	public void setTelefonnummer(String telefonnummer) {
 		this.telefonnummer.set(telefonnummer);
 	}
+	
+	public StringProperty mailProperty(){ return mail;}
+
+	public String getMail() {
+		return mail.get();
+	}
 
 	public void setMail(String mail) {
 		this.mail.set(mail);
 	}
-
-	public String toString() {
-		return "Klasse: ObservableContactDetails\nKontaktdaten:\nVorname:\t"
-				+ getVorname() + "\nNachname:\t" + getNachname()
-				+ "\nAdresse:\t" + getAdresse() + "\nTelefonnummer:\t"
-				+ getTelefonnummer() + "\nMail:\t\t" + getMail();
+	
+	public String toString(){
+		
+		StringBuilder s = new StringBuilder("[" + this.getVorname());
+		   
+		s.append(", " + this.getNachname());
+		s.append(", " + this.getAdresse());  
+		s.append(", " + this.getTelefonnummer());  
+		s.append(", " + this.getMail());  
+		s.append("]");
+   
+		return s.toString();
+	}
+	
+	public static void main(String[] args) {
+		ObservableContactDetails ocd = new ObservableContactDetails();
+		ocd.setVorname("Robert");
+		ocd.setNachname("Dziuba");
+		ocd.setAdresse("Mueller str. 142");
+		ocd.setTelefonnummer("12345678");
+		ocd.setMail("test@test.de");
+		
+		System.out.println(ocd);
 	}
 }

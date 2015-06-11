@@ -1,5 +1,6 @@
 package interfaces;
 import klassen.ContactDetails;
+import klassen.ObservableContactDetails;
 import exceptions.DetailsNotFoundException;
 import exceptions.DuplicateKeyException;
 import exceptions.InvalidContactException;
@@ -16,7 +17,7 @@ public interface AddressbookInterface {
 	 * @throws DetailsNotFoundException
 	 * @throws ParameterStringIsEmptyException
 	 */
-	public abstract ContactDetails getDetails(String key) throws DetailsNotFoundException,
+	public abstract ObservableContactDetails getDetails(String key) throws DetailsNotFoundException,
 			ParameterStringIsEmptyException;
 
 	/**
@@ -28,7 +29,7 @@ public interface AddressbookInterface {
 	 * @throws DetailsNotFoundException
 	 * @throws ParameterStringIsEmptyException
 	 */
-	public abstract ContactDetails getDetails(String name, String lastname,
+	public abstract ObservableContactDetails getDetails(String name, String lastname,
 			String phone, String mail, String address) throws DetailsNotFoundException,
 			ParameterStringIsEmptyException;
 
@@ -48,7 +49,7 @@ public interface AddressbookInterface {
 	 * @throws InvalidContactException
 	 * @throws ParameterStringIsEmptyException
 	 */
-	public abstract void addDetails(ContactDetails details)
+	public abstract void addDetails(ObservableContactDetails details)
 			throws DuplicateKeyException, InvalidContactException,
 			ParameterStringIsEmptyException;
 
@@ -61,7 +62,7 @@ public interface AddressbookInterface {
 	 * @throws KeyIsNotInUseException
 	 * @throws ParameterStringIsEmptyException
 	 */
-	public abstract void changeDetails(String oldKey, ContactDetails details)
+	public abstract void changeDetails(String oldKey, ObservableContactDetails details)
 			throws DuplicateKeyException, InvalidContactException,
 			KeyIsNotInUseException, ParameterStringIsEmptyException;
 
@@ -72,7 +73,7 @@ public interface AddressbookInterface {
 	 * @return ContactDetails[]
 	 * @throws ParameterStringIsEmptyException
 	 */
-	public abstract ContactDetails[] search(String keyPrefix)
+	public abstract ObservableContactDetails[] search(String keyPrefix)
 			throws ParameterStringIsEmptyException, DetailsNotFoundException;
 
 	/**
@@ -108,7 +109,7 @@ public interface AddressbookInterface {
 	 * @return String
 	 * @throws ParameterStringIsEmptyException
 	 */
-	public abstract String generateKey(ContactDetails details)
+	public abstract String generateKey(ObservableContactDetails details)
 			throws ParameterStringIsEmptyException;
 	
 }
