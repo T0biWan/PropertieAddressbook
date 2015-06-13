@@ -72,8 +72,8 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 			}
 			
 			HBox confirm = new HBox(10);
-			confirm.setPadding(new Insets(10));
-			confirm.setAlignment(Pos.BASELINE_CENTER);
+			//confirm.setPadding(new Insets(10));
+			//confirm.setAlignment(Pos.BASELINE_CENTER);
 			
 			Button save = new Button("Speichern");
 			Button delete = new Button("Löschen");

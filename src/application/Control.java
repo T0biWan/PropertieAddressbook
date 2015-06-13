@@ -6,6 +6,7 @@ import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -21,6 +22,7 @@ public class Control {
 	
 	private BorderPane pane;
 	private StackPane center = new StackPane();
+	private ScrollPane contactScroll = new ScrollPane();
 	private ListView<ObservableContactDetails> liste = new ListView<>();
 	private AddressBook buch = new AddressBook();
 	//DefaultNamen, damit wir Zufallskontakte entwickeln können
@@ -77,7 +79,9 @@ public class Control {
 		
 		liste.setEditable(true);
 		
-		pane.setLeft(new VBox(10,liste));
+		contactScroll.setContent(liste);
+		
+		pane.setLeft(new VBox(10,contactScroll));
 
 	}
 	
