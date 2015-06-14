@@ -16,8 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import klassen.AddressBook;
 import klassen.ObservableContactDetails;
 
@@ -25,8 +23,9 @@ public class Control {
 	//Attribute
 	TableView <ObservableContactDetails> 		tabelleFürKontakte		= new TableView();
 	ObservableList <ObservableContactDetails>	kontakte				= FXCollections.observableArrayList();
-	BorderPane pane;
-	AddressBook book = new AddressBook();
+	AddressBook 								book 					= new AddressBook();
+	BorderPane 									pane;
+	
 
 	public Control(BorderPane pane){
 		this.pane = pane;
@@ -36,10 +35,26 @@ public class Control {
 		Button print = new Button("Drucken");
 		print.setOnMouseClicked(e-> System.out.println(book));
 		Button add = new Button("+");
+		add.setOnMouseClicked(e-> this.addNewContact());
 		
 		HBox footer = new HBox(10,add, print ); 
 		
 		this.pane.setBottom(footer);
+	}
+
+	private ObservableContactDetails addNewContact() {
+		
+		try {
+			ObservableContactDetails neu = new ObservableContactDetails("Vorname","Nachname","Adresse","Telefonnummer","E-Mail");
+			book.addDetails(neu);
+			kontakte.add(neu);
+			return neu;
+		} catch (DuplicateKeyException | InvalidContactException
+				| ParameterStringIsEmptyException e) {
+			generateErrorModal(e.getMessage());
+		}
+		
+		return null;
 	}
 
 	public void fuelleTabelle() {
