@@ -64,8 +64,8 @@ public class Control {
 	}
 
 	private void erstelleKontakt() {
-		/*center.getChildren().add(new Text("Kein Kontakt ausgewählt"));
-		pane.setCenter(center);*/
+		center.getChildren().add(new Text("Kein Kontakt ausgewählt"));
+		pane.setCenter(center);
 	}
 	
 	private void fuelleAddressBook() {
