@@ -285,4 +285,17 @@ public class AddressBook implements AddressBookInterface {
 
 	}
 	
+	@Override
+	public String toString() {
+		
+		StringBuilder str = new StringBuilder("AddressBook [\n");
+		if(namesMap.size()>0){
+			for (Map.Entry entry : namesMap.entrySet()) {
+				str.append(entry.getValue().toString() + ",\n");
+			}
+		}
+		str.append("]");
+		return str.toString();
+	}
+	
 }

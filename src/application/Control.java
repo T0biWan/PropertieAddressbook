@@ -11,39 +11,37 @@ import exceptions.InvalidContactException;
 import exceptions.ParameterStringIsEmptyException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 public class Control {
 	
-	private BorderPane pane;
-	private StackPane left = new StackPane();
-	private StackPane center = new StackPane();
+	private ListView<ObservableContactDetails> 			listView 	= new ListView<>();
+	private TableView<ObservableContactDetails> 		tableView 	= new TableView<>();
+	private ObservableList<ObservableContactDetails> 	data 		= FXCollections.observableArrayList();
+	private AddressBook 								aBook 		= new AddressBook();
+	private Label 										errorText;
 	
-	private AddressBook aBook = new AddressBook();
-	
-	public Control(BorderPane pane) {
-		this.pane = pane;
-		
+	public Control(Button print, Button add, Label errorText) {
+
 		this.fuelleAddressBook();
 		
-		this.erstelleKontaktListe();
-		this.erstelleKontakt();
+		this.fuelleObservableData();
+		
+		print.setOnMouseClicked(e-> System.out.println(aBook));
+		
+		add.setOnMouseClicked(e-> this.addNewContact());
+		
+		this.errorText = errorText;
 	}
 	
-	private void erstelleKontaktListe() {
-		
-		ListView<ObservableContactDetails> listView = new ListView<>();
-		
-		listView.setEditable(true);
-		
-		ObservableList<ObservableContactDetails> data = FXCollections.observableArrayList();
-		
+	private void fuelleObservableData() {
 		ObservableContactDetails[] contactDetails = null;
-		
 		try {
 			contactDetails = aBook.search("");
 		} catch (DetailsNotFoundException | ParameterStringIsEmptyException e1) {
@@ -54,23 +52,67 @@ public class Control {
 			 data.add(contact);
 		}
 		
-		listView.setItems(data);
-		
-		listView.setCellFactory(c -> new ListCellFactory(center,aBook,listView));
-
-		left.getChildren().add(listView);
-		
-		pane.setLeft(left);	
 	}
 
-	private void erstelleKontakt() {
-		center.getChildren().add(new Text("Kein Kontakt ausgewählt"));
-		pane.setCenter(center);
+	private void addNewContact() {
+		try {
+			ObservableContactDetails neu = new ObservableContactDetails("Vorname","Nachname","Adresse","Telefonnummer","E-Mail");
+			aBook.addDetails(neu);
+			data.add(neu);
+		} catch (DuplicateKeyException | InvalidContactException
+				| ParameterStringIsEmptyException e) {
+			generateErrorModal(e.getMessage());
+		}
 	}
 	
+	public TableView<ObservableContactDetails> erstelleKontaktTabelle() {
+
+		tableView.setEditable(true);
+		
+		tableView.setItems(this.data);
+		
+		//Spalten erzeugen
+		TableColumn<ObservableContactDetails, String> vornameSpalte = new TableColumn<>("Vorname");
+		vornameSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("vorname"));
+		vornameSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		TableColumn<ObservableContactDetails, String> nachnameSpalte = new TableColumn<>("Nachname");
+		nachnameSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("nachname"));
+		nachnameSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		TableColumn<ObservableContactDetails, String> adresseSpalte = new TableColumn<>("Adresse");
+		adresseSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("adresse"));
+		adresseSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		TableColumn<ObservableContactDetails, String> telefonnummerSpalte = new TableColumn<>("Telefonnummer");
+		telefonnummerSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("telefonnummer"));
+		telefonnummerSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		TableColumn<ObservableContactDetails, String> mailSpalte = new TableColumn<>("E-Mail");
+		mailSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("mail"));
+		mailSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		//Spalten an Tabelle übergeben
+		tableView.getColumns().addAll(vornameSpalte, nachnameSpalte, adresseSpalte, telefonnummerSpalte, mailSpalte);
+		
+		return tableView;
+	}
+
+	
+	public ListView<ObservableContactDetails> erstelleKontaktListe() {
+				
+		listView.setEditable(true);
+		
+		listView.setItems(data);
+		
+		listView.setCellFactory(c -> new ListCellFactory(aBook,listView, errorText));
+	
+		return listView;
+	}
+
 	private void fuelleAddressBook() {
 		
-		for(int i = 0; i < 100; i++){
+		for(int i = 0; i < 10; i++){
 			ObservableContactDetails a = new ObservableContactDetails(
 					i + " " + csRandomAlphaNumericString(5), 
 					csRandomAlphaNumericString(6),
@@ -104,6 +146,10 @@ public class Control {
 	      buff[i] = VALID_CHARACTERS[rand.nextInt(VALID_CHARACTERS.length)];
 	    }
 	    return new String(buff);
+	}
+	
+	private void generateErrorModal(String message){
+		this.errorText.setText(message);
 	}
 
 }
