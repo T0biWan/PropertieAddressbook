@@ -3,108 +3,104 @@ package application;
 import java.security.SecureRandom;
 import java.util.Random;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import classes.AddressBook;
 import classes.ObservableContactDetails;
 import exceptions.DetailsNotFoundException;
 import exceptions.DuplicateKeyException;
 import exceptions.InvalidContactException;
 import exceptions.ParameterStringIsEmptyException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+
 
 public class Control {
 	
 	private BorderPane pane;
+	private StackPane left = new StackPane();
 	private StackPane center = new StackPane();
-	private ScrollPane contactScroll = new ScrollPane();
-	private ListView<ObservableContactDetails> liste = new ListView<>();
-	private AddressBook buch = new AddressBook();
-	//DefaultNamen, damit wir Zufallskontakte entwickeln können
-	private static char[] VALID_CHARACTERS =
-			    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456879".toCharArray();
 	
+	private AddressBook aBook = new AddressBook();
 	
 	public Control(BorderPane pane) {
 		this.pane = pane;
-		center.getChildren().add(new Text("Kein Kontakt ausgewählt."));
-		pane.setCenter(center);
-		fuelleBuch();
+		
+		this.fuelleAddressBook();
+		
+		this.erstelleKontaktListe();
+		this.erstelleKontakt();
 	}
 	
-	/**
-	 * fülle das Addressbook mit Defaultwerten
-	 */
-	private void fuelleBuch(){
+	private void erstelleKontaktListe() {
+		
+		ListView<ObservableContactDetails> listView = new ListView<>();
+		
+		listView.setEditable(true);
+		
+		ObservableList<ObservableContactDetails> data = FXCollections.observableArrayList();
+		
+		ObservableContactDetails[] contactDetails = null;
+		
+		try {
+			contactDetails = aBook.search("");
+		} catch (DetailsNotFoundException | ParameterStringIsEmptyException e1) {
+			System.out.println(e1.getMessage());
+		}
+		
+		for(ObservableContactDetails contact : contactDetails){
+			 data.add(contact);
+		}
+		
+		listView.setItems(data);
+		
+		listView.setCellFactory(c -> new ListCellFactory(center,aBook,listView));
 
-		for(int i = 0; i < 500; i++){
+		left.getChildren().add(listView);
+		
+		pane.setLeft(left);	
+	}
 
-			ObservableContactDetails person = new ObservableContactDetails(
-					this.csRandomAlphaNumericString(5), 
-					this.csRandomAlphaNumericString(6),
-					this.csRandomAlphaNumericString(9),
-					this.csRandomAlphaNumericString(12),
-					this.csRandomAlphaNumericString(25)
+	private void erstelleKontakt() {
+		/*center.getChildren().add(new Text("Kein Kontakt ausgewählt"));
+		pane.setCenter(center);*/
+	}
+	
+	private void fuelleAddressBook() {
+		
+		for(int i = 0; i < 100; i++){
+			ObservableContactDetails a = new ObservableContactDetails(
+					i + " " + csRandomAlphaNumericString(5), 
+					csRandomAlphaNumericString(6),
+					csRandomAlphaNumericString(9),
+					csRandomAlphaNumericString(12),
+					csRandomAlphaNumericString(25)
 					);	
-
 			try {
-				buch.addDetails(person);
-			} catch (DuplicateKeyException | InvalidContactException| ParameterStringIsEmptyException e) {
-				 e.getMessage();
+				aBook.addDetails(a);
+			} catch (DuplicateKeyException | InvalidContactException
+					| ParameterStringIsEmptyException e) {
+				System.out.println(e.getMessage());
 			}
-
 		}
 	}
-	
-	public void erstelleListe() {
-		try {
-			// als erstes holen wir alle Kontakte
-			ObservableContactDetails[] personen = buch.search("");
-			// wir definieren ein FXCollections.observableArrayList, welches die darzustellenden Daten enthält
-			ObservableList<ObservableContactDetails> namen = FXCollections.observableArrayList();
-			for(ObservableContactDetails person : personen){
-				namen.add(person);
-			}
-			// wir fügen unsere Daten der observableArrayList in unsere Liste hinzu
-			liste.setItems(namen);
-			
-		} catch (ParameterStringIsEmptyException | DetailsNotFoundException e) { e.getMessage();}
-		
-		liste.setCellFactory(c -> new ListCellFactory(center));
-		
-		liste.setEditable(true);
-		
-		contactScroll.setContent(liste);
-		
-		pane.setLeft(new VBox(10,contactScroll));
 
-	}
-	
-	private String csRandomAlphaNumericString(int numChars) {
-		// bei der Generierung von Zufallszahlen gibt es wie bei Pflanzen einen Samen, der zu Nachkommen führt. 
-		// Aus diesem Startwert ermittelt der Zufallszahlengenerator anschließend die folgenden Zahlen durch lineare Kongruenzen.
-		// Dadurch sind die Zahlen nicht wirklich zufällig, sondern gehorchen einem mathematischen Verfahren. 
-		// Kryptografisch bessere Zufallszahlen liefert die Klasse java.security.SecureRandom, die eine Unterklasse von Random ist.
-		SecureRandom srand = new SecureRandom();
-		
+	private static char[] VALID_CHARACTERS =
+		    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456879".toCharArray();
+
+	// cs = cryptographically secure
+	public static String csRandomAlphaNumericString(int numChars) {
+	    SecureRandom srand = new SecureRandom();
 	    Random rand = new Random();
-	    // wir intantiieren uns Array vom Typ char mit der länge der Der Zeichen die unser Default-Wort haben soll
 	    char[] buff = new char[numChars];
 
-	    // nun durchlaufen wir eine for-Schleife für jedes Zeichen 
 	    for (int i = 0; i < numChars; ++i) {
-	      // damit auch bei Zeichenketten länger als 10 Zeichen der Zufall gewährleistet wird setzen wir einen neuen Samen mit Hilfe unseres 
-	      // SecureRandom Super Algorithmus....
+	      // reseed rand once you've used up all available entropy bits
 	      if ((i % 10) == 0) {
-	    	  // and here is where the magic happens....
 	          rand.setSeed(srand.nextLong()); // 64 bits of random!
 	      }
-	      // wir kreieren in unseren Array buff ein zufälliges Zeichen mit Hilfe der von Random und unseren Zeichen Array VALID_CHARACTERS.
 	      buff[i] = VALID_CHARACTERS[rand.nextInt(VALID_CHARACTERS.length)];
 	    }
 	    return new String(buff);

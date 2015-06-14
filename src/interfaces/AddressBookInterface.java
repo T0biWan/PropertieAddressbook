@@ -1,5 +1,4 @@
 package interfaces;
-import classes.ContactDetails;
 import classes.ObservableContactDetails;
 import exceptions.DetailsNotFoundException;
 import exceptions.DuplicateKeyException;

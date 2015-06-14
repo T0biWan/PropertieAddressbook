@@ -128,6 +128,7 @@ public class AddressBook implements AddressBookInterface {
 				
 		// wir überprüfen, ob details etwas enthält
 		if (details != null) {
+			
 			// oldKey wird hier aufbereitet: trim und toLowerCase
 			oldKey = this.getCleanParameter(oldKey);
 
