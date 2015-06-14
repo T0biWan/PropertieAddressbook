@@ -11,6 +11,7 @@ public class ObservableContactDetails extends ContactDetails {
 	private StringProperty  telefonnummer = new SimpleStringProperty();
 	private StringProperty  mail = new SimpleStringProperty();
 
+	// StandartKonstruktor
 	public ObservableContactDetails(){
 		this(null,null,null,null,null);
 	}
@@ -24,6 +25,7 @@ public class ObservableContactDetails extends ContactDetails {
 		this.setMail(mail);
 	}
 	
+	// KopierKonstruktor
 	public ObservableContactDetails(ObservableContactDetails observableContactDetails){
 		this(   observableContactDetails.getVorname(),
 				observableContactDetails.getNachname(),
