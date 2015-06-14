@@ -1,23 +1,27 @@
 package klassen;
 	
+import application.Control;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
 
+
 public class View extends Application {
-	//Attribute
-	Control control = new Control();
 	
 	@Override
 	public void start(Stage stage) {
 		
+		BorderPane pane = new BorderPane();
 		
-		// SCENE
-		Scene scene = new Scene(control.tabelleFürKontakte);
+		Control control = new Control(pane);
 
-		// STAGE
+		control.fuelleTabelle();
+		
+		Scene scene = new Scene(pane, 900, 500);
+		
+		stage.setTitle("AddressBook");
 		stage.setScene(scene);
 		stage.show();
 	}
