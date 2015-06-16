@@ -21,20 +21,29 @@ import javafx.scene.control.cell.TextFieldTableCell;
 
 public class Control {
 	
+	/* alle unsere Variablen, die wir noch im laufe des Programmes außerhalb der Methoden brauchen */
+	/* stellt die Kontakte in einer ListView dar*/
 	private ListView<ObservableContactDetails> 			listView 	= new ListView<>();
+	/* stellt die Kontakte in einer TableView dar*/
 	private TableView<ObservableContactDetails> 		tableView 	= new TableView<>();
+	/* speichert unsere Kontakte für beide Views */
 	private ObservableList<ObservableContactDetails> 	data 		= FXCollections.observableArrayList();
+	/* in der ListView arbeiten wir noch mit Hilfe des AddressBook */
 	private AddressBook 								aBook 		= new AddressBook();
+	/* Da wir Fehler an mehreren Stellen haben können wird Error global initialisiert */
 	private Label 										errorText;
 	
 	public Control(Button print, Button add, Label errorText) {
-
-		this.fuelleAddressBook();
 		
+		/* wir füllen unser AddressBook mit DummyDaten*/
+		this.fuelleAddressBook();
+		/* und übergeben sie direkt an die observableArrayList */
 		this.fuelleObservableData();
 		
+		/* ruft die toString- Methode von AddressBook auf */
 		print.setOnMouseClicked(e-> System.out.println(aBook));
 		
+		/* soll einen neuen Kontakt kreieren */
 		add.setOnMouseClicked(e-> this.addNewContact());
 		
 		this.errorText = errorText;
@@ -54,6 +63,10 @@ public class Control {
 		
 	}
 
+	/* Ein neuer Kontakt wird erstellt und mit Platzhaltern "Vorname","Nachname","Adresse","Telefonnummer" und "E-Mail" gefüllt
+	 * Dieser wird an unser AddressBook übergeben und auch in unserer observableArrayList hinzugefügt. 
+	 * Im AddressBook durchläuft er natürlich alle unsere Kontrollen
+	 *  */
 	private void addNewContact() {
 		try {
 			ObservableContactDetails neu = new ObservableContactDetails("Vorname","Nachname","Adresse","Telefonnummer","E-Mail");
@@ -67,29 +80,31 @@ public class Control {
 	
 	public TableView<ObservableContactDetails> erstelleKontaktTabelle() {
 
+		/* damit wir die Tabelle editieren können*/
 		tableView.setEditable(true);
 		
+		/* übergabe der observableArrayList */
 		tableView.setItems(this.data);
 		
 		//Spalten erzeugen
 		TableColumn<ObservableContactDetails, String> vornameSpalte = new TableColumn<>("Vorname");
-		vornameSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("vorname"));
+		vornameSpalte.setCellValueFactory(e -> e.getValue().vornameProperty());
 		vornameSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
 		
 		TableColumn<ObservableContactDetails, String> nachnameSpalte = new TableColumn<>("Nachname");
-		nachnameSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("nachname"));
+		nachnameSpalte.setCellValueFactory(e -> e.getValue().nachnameProperty());
 		nachnameSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
 		
 		TableColumn<ObservableContactDetails, String> adresseSpalte = new TableColumn<>("Adresse");
-		adresseSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("adresse"));
+		adresseSpalte.setCellValueFactory(e -> e.getValue().adresseProperty());
 		adresseSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
 		
 		TableColumn<ObservableContactDetails, String> telefonnummerSpalte = new TableColumn<>("Telefonnummer");
-		telefonnummerSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("telefonnummer"));
+		telefonnummerSpalte.setCellValueFactory(e -> e.getValue().telefonnummerProperty());
 		telefonnummerSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
 		
 		TableColumn<ObservableContactDetails, String> mailSpalte = new TableColumn<>("E-Mail");
-		mailSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("mail"));
+		mailSpalte.setCellValueFactory(e -> e.getValue().mailProperty());
 		mailSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
 		
 		//Spalten an Tabelle übergeben
@@ -98,13 +113,15 @@ public class Control {
 		return tableView;
 	}
 
-	
 	public ListView<ObservableContactDetails> erstelleKontaktListe() {
 				
+		/* damit wir die Tabelle editieren können*/
 		listView.setEditable(true);
 		
+		/* übergabe der observableArrayList */
 		listView.setItems(data);
 		
+		/* Jetzt greifen wir in das Verhalten der ListView ein */
 		listView.setCellFactory(c -> new ListCellFactory(aBook,listView, errorText));
 	
 		return listView;
