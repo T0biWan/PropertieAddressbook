@@ -65,13 +65,13 @@ public class Control {
 		
 	}
 
-	/* Ein neuer Kontakt wird erstellt und mit Platzhaltern "Vorname","Nachname","Adresse","Telefonnummer" und "E-Mail" gefüllt
+	/* Ein neuer Kontakt wird erstellt und mit Platzhaltern "-" gefüllt.
 	 * Dieser wird an unser AddressBook übergeben und auch in unserer observableArrayList hinzugefügt. 
 	 * Im AddressBook durchläuft er natürlich alle unsere Kontrollen
 	 *  */
 	private void addNewContact() {
 		try {
-			ObservableContactDetails neu = new ObservableContactDetails("Vorname","Nachname","Adresse","Telefonnummer","E-Mail");
+			ObservableContactDetails neu = new ObservableContactDetails("-","-","-","-","-");
 			aBook.addDetails(neu);
 			data.add(neu);
 		} catch (DuplicateKeyException | InvalidContactException
