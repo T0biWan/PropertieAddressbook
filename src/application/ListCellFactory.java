@@ -17,7 +17,7 @@ import exceptions.ParameterStringIsEmptyException;
 
 public class ListCellFactory extends ListCell<ObservableContactDetails>{
 
-	/* Variablen die uns im Konstrukter übergeben werden */
+	/* Variablen die uns im Konstruktor übergeben werden */
 	private AddressBook aBook;
 	private ListView<ObservableContactDetails> liste;
 	private Label errorText;
@@ -79,13 +79,8 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 		/* unser Formular wird ausgeblendet und es werden die Daten vor der Veränderung angezeigt */
 		setGraphic(null);
 		setText(aktuellerKontakt.getNachname() + ", " + aktuellerKontakt.getVorname());
-		/*
-		nameField.textProperty().bindBidirectional(aktuellerKontakt.vornameProperty());
-		lastnameField.textProperty().bindBidirectional(aktuellerKontakt.nachnameProperty());
-		phoneField.textProperty().bindBidirectional(aktuellerKontakt.telefonnummerProperty());
-		emailField.textProperty().bindBidirectional(aktuellerKontakt.mailProperty());
-		addressField.textProperty().bindBidirectional(aktuellerKontakt.adresseProperty());
-		*/
+		
+		// TODO hier sollten noch die Felder des Formulars zurückgesetzt werden
 	}
 	
 	protected void updateViewMode(){
@@ -98,15 +93,18 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 		// wenn der User im Editiermodus ist (doppelt geklickt)
 		if(isEditing()){
 			if(getItem() != null){
-
+				// hier werden die "alten" Daten gespeichert für Fälle, in denen wir auf die alten Werte zurückgreifen müssen
 				this.aktuellerKontakt = new ObservableContactDetails(getItem());
 
+				// wir übergeben unseren Feldern unsere Properties und binden sie bidirektional, 
+				// damit auf eingehende und herausgehende Änderungen reagiert werden kann
 				nameField.textProperty().bindBidirectional(getItem().vornameProperty());
 				lastnameField.textProperty().bindBidirectional(getItem().nachnameProperty());
 				phoneField.textProperty().bindBidirectional(getItem().telefonnummerProperty());
 				emailField.textProperty().bindBidirectional(getItem().mailProperty());
 				addressField.textProperty().bindBidirectional(getItem().adresseProperty());
 				
+				// und erstellen unser Formular
 				setGraphic(this.createContactBox());
 			}
 		}else if(getItem() != null){
@@ -117,9 +115,11 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 	
 	private VBox createContactBox(){
 		
+		// Überschrift mit Namen und Nachnamen der sich ändert wenn in den Felder diese Werte ändert - total cool
 		Text header = new Text();
 		header.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
 		
+		// muss total umständlich geconcatet werden :S
 		header.textProperty().bind(
 				new SimpleStringProperty("Detail von ")
 				.concat(getItem().vornameProperty()
@@ -127,18 +127,23 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 						.concat(getItem().nachnameProperty())
 						)
 				);
-		
+		// Buttons mit denen der Editirprozess beendet werden kann
 		Button save = new Button("Speichern");
 		Button delete = new Button("Löschen");
 		Button cancel = new Button("Abbrechen");
 		
+		// commitEdit und cancelEdit signalisieren ListCellFactory das der 
+		// Editirprozess beenden wird und rufen zum Schluss Methoden auf
 		save.setOnAction(e -> commitEdit(speicherKontakt()));
 		delete.setOnMouseClicked(e -> commitEdit(loescheKontakt()));
 		cancel.setOnMouseClicked(e -> cancelEdit());
 		
+		
+		//  Wir erstellen unser Formular
 		VBox contacts = new VBox();
 		contacts.setPadding(new Insets(10));
 		
+		// Felder mit Label
 		for(String label : fields.keySet()){
 			contacts.getChildren().add(this.createRowBox(label,fields.get(label)));
 		}
@@ -150,7 +155,11 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 		
 		return this.contactBox;
 	}
-		
+	
+	/*
+	 * speichert Änderung des Kontaktes in Addressbook
+	 * in der ListView muss nichts geändert werden Dank binding :) 
+	 * */
 	private ObservableContactDetails speicherKontakt() {
 		
 		try {
@@ -164,6 +173,10 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 		return aktuellerKontakt;
 	}
 	
+	/*
+	 * löscht Kontakt aus AddressBook und der ListView 
+	 * 
+	 * */
 	private ObservableContactDetails loescheKontakt() {
 		try {
 			String key = aBook.generateKey(aktuellerKontakt);
@@ -176,6 +189,7 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 		return null;
 	}
 
+	/* unser Label Felder creater */
 	private HBox createRowBox(String label, TextField rowField){
 		
 		HBox rowBox = new HBox();

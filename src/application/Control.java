@@ -16,7 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 public class Control {
@@ -49,6 +48,9 @@ public class Control {
 		this.errorText = errorText;
 	}
 	
+	/*
+	 * füllt alle Kontakte in die observableArrayList
+	 * */
 	private void fuelleObservableData() {
 		ObservableContactDetails[] contactDetails = null;
 		try {
@@ -78,6 +80,12 @@ public class Control {
 		}
 	}
 	
+	/*
+	 * Diese Methode lässt sich alle Kontakte aus AddressBook geben.
+	 * Da die Search-Methode ein Array zurückgibt,
+	 * müssen die Kontakte zwischengespeichert werden.
+	 * Diese werden dann der ObservableList hinzugefügt.  
+	 */
 	public TableView<ObservableContactDetails> erstelleKontaktTabelle() {
 
 		/* damit wir die Tabelle editieren können*/
@@ -86,11 +94,20 @@ public class Control {
 		/* übergabe der observableArrayList */
 		tableView.setItems(this.data);
 		
-		//Spalten erzeugen
-		TableColumn<ObservableContactDetails, String> vornameSpalte = new TableColumn<>("Vorname");
+		// Spalten erzeugen
+		
+		// 1. Wie soll die Spallte halten
+		// Tabellenspalte hat zwei Typparameter: Typ der Struktur und Typ der Spalte
+		TableColumn<ObservableContactDetails, String> vornameSpalte = new TableColumn<>("Vorname"); // Spaltenüberschrift
+		// 2. Was soll in der Spalte/Zeile anzeigt werden
+		// Callback-Methode ermittelt den anzuzeigenden Zellwert 
+		// In ObservableContactDetails sind alle Attribute Properties und können direkt eingesetzt werden
 		vornameSpalte.setCellValueFactory(e -> e.getValue().vornameProperty());
+		// 3. Wie reagiert die  Spalte/Zeile beim editieren
+		// Zellenansicht muss im Edit-Modus definert werden - Callback-Methode liefert eine neue TableCell mit TextFieldTableCell
 		vornameSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
 		
+		// analog wie oben beschrieben
 		TableColumn<ObservableContactDetails, String> nachnameSpalte = new TableColumn<>("Nachname");
 		nachnameSpalte.setCellValueFactory(e -> e.getValue().nachnameProperty());
 		nachnameSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -127,6 +144,9 @@ public class Control {
 		return listView;
 	}
 
+	/*
+	 * Erstellt Random-Kontakte
+	 */
 	private void fuelleAddressBook() {
 		
 		for(int i = 0; i < 10; i++){
