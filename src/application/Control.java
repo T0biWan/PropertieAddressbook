@@ -41,7 +41,12 @@ public class Control {
 		
 		this.pane.setBottom(footer);
 	}
-
+	
+	/**Diese Methode lässt sich alle Kontakte aus AddressBook geben.
+	 * Da die Search-Methode ein Array zurückgibt,
+	 * müssen die Kontakte zwischengespeichert werden.
+	 * Diese werden dann der ObservableList hinzugefügt.  
+	 */
 	public void fuelleTabelle() {
 
 		ObservableContactDetails[] kontaktListe = null;
@@ -61,7 +66,9 @@ public class Control {
 		
 		tabelleFürKontakte.setItems(this.kontakte);
 		
-		//Spalten erzeugen
+		/**Spalten erzeugen
+		 * Jeweils dritte Zeile macht Attribute in der jeweiligen Spalte editierbar
+		 */
 		TableColumn<ObservableContactDetails, String> vornameSpalte = new TableColumn<>("Vorname");
 		vornameSpalte.setCellValueFactory(new PropertyValueFactory<ObservableContactDetails, String>("vorname"));
 		vornameSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -87,7 +94,8 @@ public class Control {
 		this.pane.setCenter(tabelleFürKontakte);
 	}
 	
-
+	/**Füllt AddressBook mit Random-Kontakten
+	 */
 	private void fuelleAdressBook() {
 		for(int i = 0; i < 5; i++){
 			ObservableContactDetails a = new ObservableContactDetails(
@@ -109,7 +117,8 @@ public class Control {
 	private static char[] VALID_CHARACTERS =
 		    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456879".toCharArray();
 
-	// cs = cryptographically secure
+	/**Erstellt Random-Kontakte
+	 */
 	public static String csRandomAlphaNumericString(int numChars) {
 	    SecureRandom srand = new SecureRandom();
 	    Random rand = new Random();
