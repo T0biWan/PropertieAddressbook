@@ -51,6 +51,14 @@ public class Control {
 	/*
 	 * füllt alle Kontakte in die observableArrayList
 	 * */
+	
+	/*
+	 * Diese Methode lässt sich alle Kontakte aus AddressBook geben.
+	 * Da die Search-Methode ein Array zurückgibt,
+	 * müssen die Kontakte zwischengespeichert werden.
+	 * Diese werden dann der ObservableList hinzugefügt.  
+	 */
+	
 	private void fuelleObservableData() {
 		ObservableContactDetails[] contactDetails = null;
 		try {
@@ -80,13 +88,7 @@ public class Control {
 		}
 	}
 	
-	/*
-	 * Diese Methode lässt sich alle Kontakte aus AddressBook geben.
-	 * Da die Search-Methode ein Array zurückgibt,
-	 * müssen die Kontakte zwischengespeichert werden.
-	 * Diese werden dann der ObservableList hinzugefügt.  
-	 */
-	
+
 	/**TABLE VIEW */
 	
 	public TableView<ObservableContactDetails> erstelleKontaktTabelle() {
@@ -190,6 +192,7 @@ public class Control {
 	    return new String(buff);
 	}
 	
+	/*alle Fehlermeldungen  werden nun an ein Label übergeben, welches in der View ist*/
 	private void generateErrorModal(String message){
 		this.errorText.setText(message);
 	}
