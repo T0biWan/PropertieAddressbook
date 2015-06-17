@@ -24,7 +24,7 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 	
 	/* Unsere Felder, die in unserem Formular angezeigt werden */
 	private TextField nameField = new TextField(), lastnameField = new TextField(), phoneField = new TextField(), emailField = new TextField(), addressField = new TextField();
-	/* für die einfachere Arbeit speichern wir Unsere Felder der Map */
+	/* für die einfachere Arbeit speichern wir unsere Felder der Map */
 	private Map<String, TextField> fields = new HashMap<>();
 	/* unsere FomularBox in der die Daten geändert werden können */
 	private VBox contactBox = new VBox();
@@ -45,7 +45,7 @@ public class ListCellFactory extends ListCell<ObservableContactDetails>{
 		fields.put("E-Mail",emailField);
 		fields.put("Addresse",addressField);
 		
-		// zeigt das Formular nur, wenn das Feld editable ist
+		// zeigt das Formular nur, wenn das Feld editierbar ist
 		this.contactBox.visibleProperty().bind(this.editingProperty());
 	}
 	

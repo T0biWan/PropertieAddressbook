@@ -20,7 +20,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 
 public class Control {
 	
-	/* alle unsere Variablen, die wir noch im laufe des Programmes außerhalb der Methoden brauchen */
+	/* alle unsere Variablen, die wir noch im Laufe des Programmes außerhalb der Methoden brauchen */
 	/* stellt die Kontakte in einer ListView dar*/
 	private ListView<ObservableContactDetails> 			listView 	= new ListView<>();
 	/* stellt die Kontakte in einer TableView dar*/
@@ -86,6 +86,9 @@ public class Control {
 	 * müssen die Kontakte zwischengespeichert werden.
 	 * Diese werden dann der ObservableList hinzugefügt.  
 	 */
+	
+	/**TABLE VIEW */
+	
 	public TableView<ObservableContactDetails> erstelleKontaktTabelle() {
 
 		/* damit wir die Tabelle editieren können*/
@@ -103,7 +106,7 @@ public class Control {
 		// Callback-Methode ermittelt den anzuzeigenden Zellwert 
 		// In ObservableContactDetails sind alle Attribute Properties und können direkt eingesetzt werden
 		vornameSpalte.setCellValueFactory(e -> e.getValue().vornameProperty());
-		// 3. Wie reagiert die  Spalte/Zeile beim editieren
+		// 3. Wie reagiert die  Spalte/Zeile beim Editieren
 		// Zellenansicht muss im Edit-Modus definert werden - Callback-Methode liefert eine neue TableCell mit TextFieldTableCell
 		vornameSpalte.setCellFactory(TextFieldTableCell.forTableColumn());
 		
@@ -130,6 +133,8 @@ public class Control {
 		return tableView;
 	}
 
+	/** LIST VIEW*/
+	
 	public ListView<ObservableContactDetails> erstelleKontaktListe() {
 				
 		/* damit wir die Tabelle editieren können*/
